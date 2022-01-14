@@ -6,6 +6,9 @@ const app = express();
 // Contect Database
 connectDB();
 
+// Init Middleware
+app.use(express.json({ extended: false })); // parse incoming json data into req.body
+
 app.get('/', (req, res) => {
   res.json({ message: 'Hello, Contact Server API!' });
 });
