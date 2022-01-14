@@ -1,0 +1,4 @@
+Routes : 
+- auth : login, auth blabla
+- contact : function create, update, delete blabla / basic CRUD API
+- user : register route 
