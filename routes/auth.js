@@ -5,13 +5,19 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const User = require('../models/User');
+const auth = require('../middleware/auth');
 
 // @route   Get api/auth
 // @desc    Get Logged in user
 // @access  Private
-
-router.get('/', (req, res) => {
-  res.send('Get logged a user');
+router.get('/', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password'); // -password is the fields that we don't want to show
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
 });
 
 // @route   POST api/auth
