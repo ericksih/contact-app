@@ -4,9 +4,8 @@ import {
   UPDATE_CONTACT,
   SET_CURRENT,
   CLEAR_CURRENT,
-  //   UPDATE_CONTACT,
-  //   FILTER_CONTACTS,
-  //   CLEAR_FILTER,
+  FILTER_CONTACTS,
+  CLEAR_FILTER,
 } from '../types';
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -42,7 +41,19 @@ export default (state, action) => {
         ...state,
         current: null,
       };
-
+    case FILTER_CONTACTS:
+      return {
+        ...state,
+        filtered: state.contacts.filter((contact) => {
+          const regex = new RegExp(`${action.payload}`, 'gi'); // gi means global and case insensitive (g = global, i = case insensitive)
+          return contact.name.match(regex) || contact.email.match(regex); // match returns an array of all matches or null if no match is found (match returns an array of all matches or null if no match is found)
+        }),
+      };
+    case CLEAR_FILTER:
+      return {
+        ...state,
+        filtered: null,
+      };
     default:
       return state;
   }
