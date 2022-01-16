@@ -29,23 +29,11 @@ const ContactState = (props) => {
 
   // Get Contacts
   const getContacts = async () => {
-    // TODO:
-    // load token into global headers
-    // if (localStorage.token) {
-    //   setAuthToken(localStorage.token);
-    // }
-
     try {
       const res = await axios.get('/api/contacts');
-      dispatch({
-        type: GET_CONTACT,
-        payload: res.data,
-      });
+      dispatch({ type: GET_CONTACT, payload: res.data });
     } catch (err) {
-      dispatch({
-        type: CONTACT_ERROR,
-        payload: err.response.msg,
-      });
+      dispatch({ type: CONTACT_ERROR, payload: err.response.msg });
     }
   };
 
@@ -75,6 +63,26 @@ const ContactState = (props) => {
     }
   };
 
+  // Update contact
+  const updateContact = async (contact) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    try {
+      const res = await axios.put(
+        `/api/contacts/${contact._id}`,
+        contact,
+        config
+      );
+      dispatch({ type: UPDATE_CONTACT, payload: res.data });
+    } catch (err) {
+      dispatch({ type: CONTACT_ERROR, payload: err.response.data.msg });
+    }
+  };
+
   // Clear contact
   const clearContacts = (id) => {
     dispatch({ type: CLEAR_CONTACTS, payload: id });
@@ -88,11 +96,6 @@ const ContactState = (props) => {
   // Clear current contact
   const clearCurrent = () => {
     dispatch({ type: CLEAR_CURRENT }); // no need payload cause we don't need to pass anything
-  };
-
-  // Update contact
-  const updateContact = (contact) => {
-    dispatch({ type: UPDATE_CONTACT, payload: contact });
   };
 
   // Filter contacts

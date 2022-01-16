@@ -1,9 +1,8 @@
 import React, { useReducer } from 'react';
-import axios from 'axios';
 import AuthContext from './authContext';
 import authReducer from './authReducer';
 import setAuthToken from '../../utils/setAuthToken';
-
+import axios from 'axios';
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -19,8 +18,8 @@ const AuthState = (props) => {
   const initialState = {
     token: localStorage.getItem('token'),
     isAuthenticated: null,
-    loading: true,
     user: null,
+    loading: true,
     error: null,
   };
 
@@ -28,8 +27,6 @@ const AuthState = (props) => {
 
   // Load User
   const loadUser = async () => {
-    // TODO:
-    // load token into global headers
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
@@ -41,61 +38,62 @@ const AuthState = (props) => {
         type: USER_LOADED,
         payload: res.data,
       });
-      loadUser();
     } catch (err) {
       dispatch({ type: AUTH_ERROR });
     }
   };
 
   // Register User
-  const register = async (FormData) => {
-    // FormData is the data from the form (name, email, password) in Register.js (Register.js)
+  const register = async (formData) => {
     const config = {
       headers: {
-        // Headers are used to specify the data type and other metadata about the request or response payload.
         'Content-Type': 'application/json',
       },
     };
 
     try {
-      const res = await axios.post('/api/users', FormData, config);
+      const res = await axios.post('/api/users', formData, config);
+
       dispatch({
         type: REGISTER_SUCCESS,
         payload: res.data,
       });
+
+      loadUser();
     } catch (err) {
       dispatch({
-        type: REGISTER_FAIL, // REGISTER_FAIL is a type in authReducer file (authReducer.js) in auth folder
-        payload: err.response.data.msg, // err.response.data.msg is the error message from the server side (server/routes/users.js) in the register() method
+        type: REGISTER_FAIL,
+        payload: err.response.data.msg,
       });
     }
   };
 
   // Login User
-  const login = async (FormData) => {
-    // FormData is the data from the form (name, email, password) in Register.js (Register.js)
+  const login = async (formData) => {
     const config = {
       headers: {
-        // Headers are used to specify the data type and other metadata about the request or response payload.
         'Content-Type': 'application/json',
       },
     };
 
     try {
-      const res = await axios.post('/api/auth', FormData, config);
+      const res = await axios.post('/api/auth', formData, config);
+
       dispatch({
         type: LOGIN_SUCCESS,
         payload: res.data,
       });
+
+      loadUser();
     } catch (err) {
       dispatch({
-        type: LOGIN_FAIL, // REGISTER_FAIL is a type in authReducer file (authReducer.js) in auth folder
-        payload: err.response.data.msg, // err.response.data.msg is the error message from the server side (server/routes/users.js) in the register() method
+        type: LOGIN_FAIL,
+        payload: err.response.data.msg,
       });
     }
   };
 
-  // Logout User
+  // Logout
   const logout = () => dispatch({ type: LOGOUT });
 
   // Clear Errors
@@ -105,9 +103,9 @@ const AuthState = (props) => {
     <AuthContext.Provider
       value={{
         token: state.token,
-        isAuthenticated: state.isAuthenticated,
-        loading: state.loading,
         user: state.user,
+        loading: state.loading,
+        isAuthenticated: state.isAuthenticated,
         error: state.error,
         register,
         loadUser,

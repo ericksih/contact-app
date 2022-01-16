@@ -1,12 +1,12 @@
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
-  USER_LOADED,
-  AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
+  AUTH_ERROR,
   CLEAR_ERRORS,
+  USER_LOADED,
 } from '../types';
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -15,8 +15,8 @@ export default (state, action) => {
     case USER_LOADED:
       return {
         ...state,
+        ...action.payload,
         isAuthenticated: true,
-        loading: false,
         user: action.payload,
       };
     case REGISTER_SUCCESS:
@@ -28,9 +28,9 @@ export default (state, action) => {
         isAuthenticated: true,
         loading: false,
       };
-    case REGISTER_FAIL:
     case AUTH_ERROR:
     case LOGIN_FAIL:
+    case REGISTER_FAIL:
     case LOGOUT:
       localStorage.removeItem('token');
       return {

@@ -1,24 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import ContactContext from '../../context/contact/contactContext';
+import AlertContext from '../../context/alert/alertContext';
 
 const ContactForm = () => {
   const contactContext = useContext(ContactContext);
-
-  const { addContact, clearCurrent, updateContact, current } = contactContext;
-
-  useEffect(() => {
-    if (current !== null) {
-      setContact(current);
-    } else {
-      setContact({
-        name: '',
-        email: '',
-        phone: '',
-        type: 'personal',
-      });
-    }
-  }, [contactContext, current]);
-
+  const alertContext = useContext(AlertContext);
+  const { addContact, updateContact, current, clearCurrent, error } =
+    contactContext;
   const [contact, setContact] = useState({
     name: '',
     email: '',
@@ -26,23 +14,45 @@ const ContactForm = () => {
     type: 'personal',
   });
 
+  useEffect(() => {
+    if (current === null) {
+      setContact({
+        name: '',
+        email: '',
+        phone: '',
+        type: 'personal',
+      });
+    } else {
+      setContact(current);
+    }
+  }, [contactContext, current]);
+
+  useEffect(() => {
+    if (error) {
+      alertContext.setAlert(error, 'danger');
+    }
+    // eslint-disable-next-line
+  }, [error]);
+
   const { name, email, phone, type } = contact;
 
-  const onChange = (e) =>
+  const onChange = (e) => {
     setContact({ ...contact, [e.target.name]: e.target.value });
+  };
+
+  const clearAll = () => {
+    clearCurrent();
+  };
 
   const onSubmit = (e) => {
     e.preventDefault();
+
     if (current === null) {
       addContact(contact);
     } else {
       updateContact(contact);
     }
     clearAll();
-  };
-
-  const clearAll = () => {
-    clearCurrent();
   };
 
   return (
@@ -78,26 +88,26 @@ const ContactForm = () => {
         value='personal'
         checked={type === 'personal'}
         onChange={onChange}
-      />
-      Personal{'  '}
+      />{' '}
+      Personal{' '}
       <input
         type='radio'
         name='type'
         value='professional'
         checked={type === 'professional'}
         onChange={onChange}
-      />
-      Professional{' '}
+      />{' '}
+      Professional
       <div>
         <input
           type='submit'
-          value={current ? 'Update' : 'Add Contact'}
-          className='btn btn-primary btn btn-block'
+          value={current ? 'Update Contact' : 'Add Contact'}
+          className='btn btn-primary btn-block'
         />
       </div>
       {current && (
         <div>
-          <button className='btn btn-light btn btn-block' onClick={clearAll}>
+          <button className='btn btn-light btn-block' onClick={clearAll}>
             Clear
           </button>
         </div>

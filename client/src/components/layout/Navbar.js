@@ -16,7 +16,7 @@ const Navbar = ({ title, icon }) => {
     clearContacts();
   };
 
-  const authLinks = (
+  const authLinks = () => (
     <Fragment>
       <li> Hello, {user && user.name} </li>
       <li>
@@ -28,7 +28,7 @@ const Navbar = ({ title, icon }) => {
     </Fragment>
   );
 
-  const guestLinks = (
+  const guestLinks = () => (
     <Fragment>
       <li>
         <Link to='/register'> Register </Link>
@@ -46,7 +46,7 @@ const Navbar = ({ title, icon }) => {
           <i className={icon} /> {title}
         </Link>
       </h1>
-      <ul>{isAuthenticated ? authLinks : guestLinks}</ul>
+      <ul>{isAuthenticated ? authLinks() : guestLinks()}</ul>
     </div>
   );
 };
