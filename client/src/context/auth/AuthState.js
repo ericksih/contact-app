@@ -9,8 +9,8 @@ import {
   REGISTER_FAIL,
   USER_LOADED,
   AUTH_ERROR,
-  // LOGIN_SUCCESS,
-  // LOGIN_FAIL,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
   // LOGOUT,
   CLEAR_ERRORS,
 } from '../types';
@@ -72,7 +72,28 @@ const AuthState = (props) => {
   };
 
   // Login User
-  const login = () => console.log('login user ');
+  const login = async (FormData) => {
+    // FormData is the data from the form (name, email, password) in Register.js (Register.js)
+    const config = {
+      headers: {
+        // Headers are used to specify the data type and other metadata about the request or response payload.
+        'Content-Type': 'application/json',
+      },
+    };
+
+    try {
+      const res = await axios.post('/api/auth', FormData, config);
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.data,
+      });
+    } catch (err) {
+      dispatch({
+        type: LOGIN_FAIL, // REGISTER_FAIL is a type in authReducer file (authReducer.js) in auth folder
+        payload: err.response.data.msg, // err.response.data.msg is the error message from the server side (server/routes/users.js) in the register() method
+      });
+    }
+  };
 
   // Logout User
   const logout = () => console.log('logout user ');
