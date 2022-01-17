@@ -1,6 +1,27 @@
 ## NOTES 📝
+Live on : https://contact-app-erick.herokuapp.com/login
 
-- FE still ongoing . . .
+## Usage
+
+Install dependencies
+
+```bash
+npm install
+cd client
+npm install
+```
+
+### Mongo connection setup
+
+Edit your /config/default.json file to include the correct MongoDB URI
+
+### Run Server
+
+```bash
+npm run dev     # Express & React :3000 & :5000
+npm run server  # Express API Only :5000
+npm run client  # React Client Only :3000
+```
 
 ## End Point
 ### Users & Authentication Routes
