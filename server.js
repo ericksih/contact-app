@@ -10,10 +10,6 @@ connectDB();
 // Init Middleware
 app.use(express.json({ extended: false })); // parse incoming json data into req.body
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Hello, Contact Server API!' });
-});
-
 // define routes
 app.use('/api/users', require('./routes/users'));
 app.use('/api/auth', require('./routes/auth'));
