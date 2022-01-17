@@ -14,10 +14,16 @@ const Login = (props) => {
       props.history.push('/');
     }
 
-    if (error === 'Invalid Credentials') {
+    if (error === 'Password is incorrect') {
       setAlert(error, 'danger');
       clearErrors();
     }
+
+    if (error === 'User not found') {
+      setAlert(error, 'danger');
+      clearErrors();
+    }
+
     // eslint-disable-next-line
   }, [error, isAuthenticated, props.history]);
 
