@@ -47,6 +47,10 @@ const ContactForm = () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
+    if (name === '' || email === '' || phone === '') {
+      alertContext.setAlert('Please enter all fields', 'danger');
+    }
+
     if (current === null) {
       addContact(contact);
     } else {
@@ -66,6 +70,7 @@ const ContactForm = () => {
         name='name'
         value={name}
         onChange={onChange}
+        required
       />
       <input
         type='email'
@@ -73,6 +78,7 @@ const ContactForm = () => {
         name='email'
         value={email}
         onChange={onChange}
+        required
       />
       <input
         type='text'
@@ -80,6 +86,7 @@ const ContactForm = () => {
         name='phone'
         value={phone}
         onChange={onChange}
+        required
       />
       <h5>Contact Type</h5>
       <input
